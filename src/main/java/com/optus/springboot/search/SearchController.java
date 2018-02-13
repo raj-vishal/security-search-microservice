@@ -1,9 +1,21 @@
 package com.optus.springboot.search;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,18 +25,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 @RestController
+@Configuration
+@ComponentScan
+@EnableAutoConfiguration
 public class SearchController {
 
 	private static int KEYVALUEINDEX = 1;
+	private static String REST_URL_PROP = "rest.url";
+
+	@Autowired
+	private Environment environment;
 
     @GetMapping("/counter-api")
     public String welcomeMessage(@AuthenticationPrincipal final UserDetails userDetails) {
@@ -41,7 +52,7 @@ public class SearchController {
 	public Map<String, Integer> searchAll(Model counts) {
 
 		RestTemplate remoteServiceInvoker = new RestTemplate();
-		Map<String, Integer> listOfWords = remoteServiceInvoker.getForObject("http://localhost:9002/loadFile", Map.class);
+		Map<String, Integer> listOfWords = remoteServiceInvoker.getForObject(environment.getProperty(REST_URL_PROP).concat("loadFile"), Map.class);
 		return listOfWords;
 		
 	}
@@ -63,10 +74,10 @@ public class SearchController {
 
 			String queryDecoded = URLDecoder.decode(queryString, "UTF-8");
 			
-			List<String> KeyValueQuery = new ArrayList<String>(Arrays.asList(queryDecoded.split(":")));
+			List<String> keyValueQuery = new ArrayList<String>(Arrays.asList(queryDecoded.split(":")));
 			
-			if (!KeyValueQuery.isEmpty()) {
-				keyWordList = new ArrayList(Arrays.asList(KeyValueQuery.get(KEYVALUEINDEX).split("\\W+")));
+			if (!keyValueQuery.isEmpty()) {
+				keyWordList = new ArrayList<String>(Arrays.asList(keyValueQuery.get(KEYVALUEINDEX).split("\\W+")));
 			}
 			
 		} catch (UnsupportedEncodingException e) {
@@ -74,7 +85,7 @@ public class SearchController {
 			e.printStackTrace();
 		}
 		
-		Map<String, Integer> counterMap = remoteServiceInvoker.getForObject("http://localhost:9002/wordCounter/"+ keyWordList, Map.class);
+		Map<String, Integer> counterMap = remoteServiceInvoker.getForObject(environment.getProperty(REST_URL_PROP).concat("wordCounter/") + keyWordList, Map.class);
 
 		return counterMap;
 		
@@ -91,7 +102,7 @@ public class SearchController {
 	public Map<String, Integer> wordsWithTopCount(@PathVariable("count") String count) {
 		
 		RestTemplate remoteServiceInvoker = new RestTemplate();
-		Map<String, Integer> counterMap = remoteServiceInvoker.getForObject("http://localhost:9002/topWordsCounter/"+ count, Map.class);
+		Map<String, Integer> counterMap = remoteServiceInvoker.getForObject(environment.getProperty(REST_URL_PROP).concat("topWordsCounter/").concat(count), Map.class);
 
 		return counterMap;		
 	}
