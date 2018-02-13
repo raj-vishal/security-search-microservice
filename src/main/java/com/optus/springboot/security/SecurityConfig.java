@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableWebSecurity
-//@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// Authentication
 	protected void configure(AuthenticationManagerBuilder auth)

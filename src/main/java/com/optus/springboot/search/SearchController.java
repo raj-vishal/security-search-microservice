@@ -31,8 +31,8 @@ import org.springframework.web.client.RestTemplate;
 @EnableAutoConfiguration
 public class SearchController {
 
-	private static int KEYVALUEINDEX = 1;
-	private static String REST_URL_PROP = "rest.url";
+	private static final int KEYVALUEINDEX = 1;
+	private static final String REST_URL_PROP = "rest.url";
 
 	@Autowired
 	private Environment environment;
