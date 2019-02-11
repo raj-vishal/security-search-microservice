@@ -4,6 +4,7 @@ MicroService that provides Spring Security and lists the top occurances of text 
 The Microservice is exposed on PORT 9004, as is defined in the application.properties file.
 Additionally Basic Authorization has been implemented using Spring-Boot_Security, wherein the credentials given are BASE64 encoded.If the given credentials do not match the stored credentials, authorization is restricted.
 Task 1: The following curl would return a JSON, that determinedd the count of the keywords sent in the request JSON 
+
 curl http://localhost:9007/counter-api/search -H "Authorization: Basic b3B0dXM6Y2FuZGlkYXRlcw==" -d '{"searchText":["Duis", "Sed", "Donec", "Argue", "Pellentesque", "123"]}' -H "Content-Type: application/json" -X POST
 
 Eg: {"Sed":16,"Donec":8,"Augue":7,"Pellentesque":6,"Duis":11}
