@@ -14,4 +14,4 @@ Task 2: Provide the top 20 (as Path Variable) Texts, which has the highest count
 curl http://localhost:9007/counter-api/top/20 -H "authorization: Basic b3B0dXM6Y2FuZGlkYXRlcw==" -H "Accept: text/csv"
 
 Would result in the generation of a CSV file with the following content Eg: vel|17 eget|17 sed|16 in|15 et|14 ut|13 eu|13 id|12 ac|12 metus|12 sit|12 amet|12 nulla|12 at|11 ipsum|11 duis|11 nec|11 vitae|11 dolor|10 aliquam|10
-# security-search-microservice
+## security-search-microservice
